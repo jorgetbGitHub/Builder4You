@@ -1,10 +1,10 @@
-﻿using Builder.Exceptions;
-using Builder.Interfaces;
+﻿using Builder4You.Exceptions;
+using Builder4You.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Builder.Implementations
+namespace Builder4You.Implementations
 {
-    public class BuilderFrom<TResource>(IServiceProvider provider) : Builder<TResource>, IBuilderFrom<TResource> 
+    public class BuilderFrom<TResource>(IServiceProvider provider) : Builder<TResource>, IBuilderFrom<TResource>
         where TResource : IBuildeable
     {
         private readonly IServiceProvider _provider = provider;

@@ -1,7 +1,7 @@
-﻿using Builder.Interfaces;
+﻿using Builder4You.Interfaces;
 using System.Linq.Expressions;
 
-namespace Builder.Implementations
+namespace Builder4You.Implementations
 {
     public class Builder<TResource> : IBuilder<TResource>, IBuilderAsync<TResource>
         where TResource : IBuildeable

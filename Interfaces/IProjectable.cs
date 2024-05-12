@@ -1,4 +1,4 @@
-﻿namespace Builder.Interfaces
+﻿namespace Builder4You.Interfaces
 {
     public interface IProjectable<TSource, TResource>
         where TResource : IBuildeable

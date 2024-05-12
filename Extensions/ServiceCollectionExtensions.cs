@@ -1,8 +1,7 @@
-﻿using Builder.Implementations;
-using Builder.Interfaces;
+﻿using Builder4You.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Builder.Extensions
+namespace Builder4You.Extensions
 {
     public static class ServiceCollectionExtensions
     {

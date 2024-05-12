@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Builder.Interfaces
+namespace Builder4You.Interfaces
 {
     public interface IBuilder<TResource> // BuilderSync
         where TResource : IBuildeable

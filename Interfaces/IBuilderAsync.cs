@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 
-namespace Builder.Interfaces
+namespace Builder4You.Interfaces
 {
-    public interface IBuilderAsync<TResource> 
+    public interface IBuilderAsync<TResource>
         where TResource : IBuildeable
     {
         IBuilderAsync<TResource> With<TProperty>(Expression<Func<TResource, TProperty>> property, TProperty value);

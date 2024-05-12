@@ -1,4 +1,4 @@
-﻿namespace Builder.Interfaces
+﻿namespace Builder4You.Interfaces
 {
 
     public interface IBuilderFrom<TResource>
