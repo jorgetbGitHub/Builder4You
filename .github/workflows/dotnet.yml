@@ -21,8 +21,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Builder4You
+      run: dotnet restore Tests
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build Tests --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test Tests --no-build --verbosity normal
