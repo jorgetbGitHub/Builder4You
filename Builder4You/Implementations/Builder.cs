@@ -22,7 +22,20 @@ namespace Builder4You.Implementations
         public Task<TResource> CreateAsync()
         {
             return Task.WhenAll(Tasks)
-                .ContinueWith(allCompleted => Create());
+                .ContinueWith(allCompleted =>
+                {
+                    switch (allCompleted.Status)
+                    {
+                        case TaskStatus.Faulted:
+                            throw allCompleted.Exception!;
+                        case TaskStatus.Canceled:
+                            // TODO: CreateAsync cancellable
+                            break;
+                        // TODO: Analyze the rest of possible task.status
+                    }
+
+                    return Create();
+                });
         }
 
         public IBuilder<TResource> With<TProperty>(Expression<Func<TResource, TProperty>> property, TProperty value)

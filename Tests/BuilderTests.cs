@@ -158,5 +158,59 @@ namespace Tests
                 StringProperty = "test-resource"
             });
         }
+
+        //[Fact]
+        //public void With_WhenAssignValueToNotExistingProperty_ThenThrowsRequiredMemberAccessException_Test()
+        //{
+        //    // act & assert
+        //    Assert.Throws<RequiredMemberAccessException>(() => _builderA.With(r => "not-existing-property", "not-valid"));
+        //}
+
+        //[Fact]
+        //public void With_WhenAssignValueToNotSetteableProperty_ThenThrowsPropertyNotSetteableException_Test()
+        //{
+        //    // act & assert
+        //    Assert.Throws<PropertyNotSetteableException>(() => _builderA.With(r => r.NotSettableProperty, "not-valid"));
+        //}
+
+        [Fact]
+        public async Task CreateAsync_WhenAssignValueToNoExistingProperty_ThenThrowsInnerRequiredMemberAccessException_Test()
+        {
+            // arrange
+            var builderAsync = _builderA.WithAsync(r => "not-existing-property", Task.FromResult("not-valid"));
+
+            try
+            {
+                // act
+                await builderAsync.CreateAsync();
+            }
+            catch (Exception ex)
+            {
+                // assert
+                ex.Should().BeOfType<AggregateException>();
+                ex.InnerException.Should().NotBeNull()
+                    .And.BeOfType<RequiredMemberAccessException>();
+            }
+        }
+
+        [Fact]
+        public async Task CreateAsync_WhenAssignValueToNotSetteableProperty_ThenThrowsInnerPropertyNotSetteableException_Test()
+        {
+            // arrange
+            var builderAsync = _builderA.WithAsync(r => r.NotSettableProperty, Task.FromResult("not-valid"));
+
+            try
+            {
+                // act
+                await builderAsync.CreateAsync();
+            } 
+            catch(Exception ex)
+            {
+                // assert
+                ex.Should().BeOfType<AggregateException>();
+                ex.InnerException.Should().NotBeNull()
+                    .And.BeOfType<PropertyNotSetteableException>();
+            }
+        }
     }
 }
