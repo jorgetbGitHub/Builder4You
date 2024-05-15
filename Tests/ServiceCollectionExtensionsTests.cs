@@ -55,12 +55,6 @@ namespace Tests
             builderA.Should().NotBeNull().And.BeOfType<Builder<ResourceA>>();
             builderFromA.Should().NotBeNull().And.BeOfType<BuilderFrom<ResourceA>>();
 
-            var builderB = provider.GetService<IBuilder<ResourceB>>();
-            var builderFromB = provider.GetService<IBuilderFrom<ResourceB>>();
-
-            builderB.Should().NotBeNull().And.BeOfType<Builder<ResourceB>>();
-            builderFromB.Should().NotBeNull().And.BeOfType<BuilderFrom<ResourceB>>();
-
             var builderC = provider.GetService<IBuilder<ResourceC>>();
             var builderFromC = provider.GetService<IBuilderFrom<ResourceC>>();
 

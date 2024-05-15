@@ -1,10 +1,6 @@
 ﻿namespace Builder4You.Exceptions
 {
-    public class ProjectableNotExistsException : Exception
+    public class ProjectableNotExistsException(Type sourceType, Type resourceType) : Exception($"")
     {
-        public ProjectableNotExistsException(Type sourceType, Type resourceType)
-            : base($"")
-        {
-        }
     }
 }

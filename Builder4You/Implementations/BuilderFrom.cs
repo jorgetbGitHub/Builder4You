@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Builder4You.Implementations
 {
     public class BuilderFrom<TResource>(IServiceProvider provider) : Builder<TResource>, IBuilderFrom<TResource>
-        where TResource : IBuildeable
+        where TResource : IBuildeable, new()
     {
         private readonly IServiceProvider _provider = provider;
         public IBuilder<TResource> From<TSource>(TSource source)

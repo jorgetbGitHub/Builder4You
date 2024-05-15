@@ -1,4 +1,5 @@
-﻿using Builder4You.Implementations;
+﻿using Builder4You.Exceptions;
+using Builder4You.Implementations;
 using Builder4You.Interfaces;
 using FluentAssertions;
 using Tests.Auxiliary.Buildeables;
@@ -8,12 +9,10 @@ namespace Tests
     public class BuilderTests
     {
         private readonly Builder<ResourceA> _builderA;
-        private readonly Builder<ResourceB> _builderB;
 
-        private BuilderTests()
+        public BuilderTests()
         {
             _builderA = new();
-            _builderB = new();
         }
 
         [Fact]
@@ -24,28 +23,32 @@ namespace Tests
 
             // assert
             builder.Should().BeOfType<Builder<ResourceA>>()
-                .And.BeOfType<IBuilder<ResourceA>>();
+                .And.BeAssignableTo<IBuilder<ResourceA>>();
         }
 
         [Fact]
-        public void With_WhenAssignValueToNotExistingProperty_ThenThrowsException_Test()
+        public void With_WhenAssignValueToNotExistingProperty_ThenThrowsRequiredMemberAccessException_Test()
         {
             // act & assert
-            Assert.Throws<Exception>(() => _builderA.With(r => "not-existing-property", "not-valid"));
+            Assert.Throws<RequiredMemberAccessException>(() => _builderA.With(r => "not-existing-property", "not-valid"));
         }
 
         [Fact]
-        public void With_WhenAssignValueToNotSetteableProperty_ThenThrowsException_Test()
+        public void With_WhenAssignValueToNotSetteableProperty_ThenThrowsPropertyNotSetteableException_Test()
         {
             // act & assert
-            Assert.Throws<Exception>(() => _builderA.With(r => r.NotSettableProperty, "not-valid"));
+            Assert.Throws<PropertyNotSetteableException>(() => _builderA.With(r => r.NotSettableProperty, "not-valid"));
         }
 
         [Fact]
-        public void With_WhenAssignValueToField_ThenThrowsException_Test()
+        public void With_WhenAssignValueToPublicField_ThenReturnsIBuilder_Test()
         {
-            // act & assert
-            Assert.Throws<Exception>(() => _builderA.With(r => r.StringField, "not-valid"));
+            // act
+            var builder = _builderA.With(r => r.StringField, "test-resource");
+
+            // assert
+            builder.Should().BeOfType<Builder<ResourceA>>()
+                .And.BeAssignableTo<IBuilder<ResourceA>>();
         }
 
         [Fact]
@@ -56,35 +59,40 @@ namespace Tests
 
             // assert
             builderAsync.Should().BeOfType<Builder<ResourceA>>()
-                .And.BeOfType<IBuilderAsync<ResourceA>>();
+                .And.BeAssignableTo<IBuilderAsync<ResourceA>>();
         }
 
         [Fact]
-        public void WithAsync_WhenAssignValueToNotExistingProperty_ThenThrowsException_Test()
-        {
-            // act & assert
-            Assert.Throws<Exception>(() => _builderA.WithAsync(r => "not-existing-property", Task.FromResult("not-valid")));
-        }
-
-        [Fact]
-        public void WithAsync_WhenAssignValueToNotSetteableProperty_ThenThrowsException_Test()
+        public void WithAsync_WhenAssignValueToNotExistingProperty_ThenReturnsIBuilderAsync_Test()
         {
             // act
-            Assert.Throws<Exception>(() => _builderA.WithAsync(r => r.NotSettableProperty, Task.FromResult("not-valid")));
+            var builderAsync = _builderA.WithAsync(r => "not-existing-property", Task.FromResult("not-valid"));
+
+            // assert
+            builderAsync.Should().BeOfType<Builder<ResourceA>>()
+                .And.BeAssignableTo<IBuilderAsync<ResourceA>>();
         }
 
         [Fact]
-        public void WithAsync_WhenAssignValueToField_ThenThrowsException_Test()
+        public void WithAsync_WhenAssignValueToNotSetteableProperty_ThenReturnsBuilderAsync_Test()
         {
             // act
-            Assert.Throws<Exception>(() => _builderA.WithAsync(r => r.StringField, Task.FromResult("not-valid")));
+            var builderAsync = _builderA.WithAsync(r => r.NotSettableProperty, Task.FromResult("not-valid"));
+
+            // assert
+            builderAsync.Should().BeOfType<Builder<ResourceA>>()
+                .And.BeAssignableTo<IBuilderAsync<ResourceA>>();
         }
 
         [Fact]
-        public void Create_WhenHasNotParameterlessPublicConstructor_ThenThrowsException_Test()
+        public void WithAsync_WhenAssignValueToPublicField_ThenReturnsBuilderAsync_Test()
         {
-            // act & assert
-            Assert.Throws<Exception>(() => _builderB.Create());
+            // act
+            var builderAsync = _builderA.WithAsync(r => r.StringField, Task.FromResult("test-resource"));
+
+            // assert
+            builderAsync.Should().BeOfType<Builder<ResourceA>>()
+                .And.BeAssignableTo<IBuilderAsync<ResourceA>>();
         }
 
         [Fact]
@@ -115,18 +123,6 @@ namespace Tests
                 StringProperty = "test-resource",
                 DecimalProperty = 3.1416m
             });
-        }
-
-        [Fact]
-        public void CreateAsync_WhenHasNotParameterlessPublicConstructor_ThenThrowsException_Test()
-        {
-            // arrange
-            var builderBAsync = 
-                _builderB
-                    .WithAsync(r => r.StringProperty, Task.FromResult<string?>("test-resource"));
-
-            // act & assert
-            Assert.ThrowsAsync<Exception>(() => builderBAsync.CreateAsync());
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 {
 
     public interface IBuilderFrom<TResource>
-        where TResource : IBuildeable
+        where TResource : IBuildeable, new()
     {
         IBuilder<TResource> From<TSource>(TSource resource);
     }

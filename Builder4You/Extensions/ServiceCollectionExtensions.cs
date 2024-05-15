@@ -14,7 +14,7 @@ namespace Builder4You.Extensions
 
             var buildeableClasses = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(IsBuildeableClass);
+                .Where(t => IsBuildeableClass(t) && HasPublicParameterlessConstructor(t));
 
             foreach (var buildeableClass in buildeableClasses)
             {
@@ -35,7 +35,7 @@ namespace Builder4You.Extensions
 
             var projectableClasses = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(IsProjectableClass);
+                .Where(t => IsProjectableClass(t) && HasPublicParameterlessConstructor(t));
 
             foreach (var projectableClass in projectableClasses)
             {
@@ -58,6 +58,9 @@ namespace Builder4You.Extensions
             return t.GetInterfaces().Any(
                 i => i.Name == projectableType.Name);
         }
+
+        private static bool HasPublicParameterlessConstructor(Type t) 
+            => t.GetConstructor(Type.EmptyTypes) is not null;
 
         private static bool IsBuildeableClass(Type t)
         {
