@@ -10,7 +10,7 @@ namespace Builder4You.Implementations
         private readonly IServiceProvider _provider = provider;
         public IBuilder<TResource> From<TSource>(TSource source)
         {
-            var projectable = _provider.GetRequiredService<IProjectable<TSource, TResource>>();
+            var projectable = _provider.GetService<IProjectable<TSource, TResource>>();
             if (projectable is not null)
             {
                 Resource = projectable.Project(source);
@@ -25,7 +25,7 @@ namespace Builder4You.Implementations
 
         public IBuilderAsync<TResource> FromAsync<TSource>(Task<TSource> sourceTask)
         {
-            var projectable = _provider.GetRequiredService<IProjectable<TSource, TResource>>();
+            var projectable = _provider.GetService<IProjectable<TSource, TResource>>();
             if (projectable is not null)
             {
                 sourceTask.ContinueWith(completed =>
