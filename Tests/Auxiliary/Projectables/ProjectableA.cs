@@ -7,8 +7,13 @@ namespace Tests.Auxiliary.Projectables
     internal class ProjectableA : IProjectable<AggregateA, ResourceA>
     {
         public ResourceA Project(AggregateA source)
+        => new()
         {
-            throw new NotImplementedException();
-        }
+            IntegerProperty = source.IntegerProperty,
+            DecimalProperty = source.DecimalProperty,
+            StringProperty = source.StringProperty,
+            BooleanProperty = source.BooleanProperty,
+        };
+        
     }
 }
