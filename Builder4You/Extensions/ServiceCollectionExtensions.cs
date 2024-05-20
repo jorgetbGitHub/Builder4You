@@ -1,6 +1,7 @@
 ﻿using Builder4You.Implementations;
 using Builder4You.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Builder4You.Extensions
 {
@@ -10,21 +11,29 @@ namespace Builder4You.Extensions
         private static (Type Class, Type Interface) BuilderFromType = (typeof(BuilderFrom<>), typeof(IBuilderFrom<>));
         public static IServiceCollection AddBuilders(this IServiceCollection services)
         {
-            var buildeableType = typeof(IBuildeable);
-
-            var buildeableClasses = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(t => IsBuildeableClass(t) && HasPublicParameterlessConstructor(t));
-
-            foreach (var buildeableClass in buildeableClasses)
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                services.AddScoped(
-                    BuilderType.Interface.MakeGenericType(buildeableClass),
-                    BuilderType.Class.MakeGenericType(buildeableClass));
+                try
+                {
+                    var buildeableClasses = assembly.GetTypes()
+                        .Where(t => IsBuildeableClass(t) && HasPublicParameterlessConstructor(t));
 
-                services.AddScoped(
-                    BuilderFromType.Interface.MakeGenericType(buildeableClass),
-                    BuilderFromType.Class.MakeGenericType(buildeableClass));
+                    foreach (Type buildeableClass in buildeableClasses)
+                    {
+                        services.AddScoped(
+                            BuilderType.Interface.MakeGenericType(buildeableClass),
+                            BuilderType.Class.MakeGenericType(buildeableClass));
+
+                        services.AddScoped(
+                            BuilderFromType.Interface.MakeGenericType(buildeableClass),
+                            BuilderFromType.Class.MakeGenericType(buildeableClass));
+                    }
+                }
+                catch 
+                { 
+                    // Not load assembly would be Ignored.
+                    // It's a problem related to race condition applied at testing context.
+                }
             }
 
             return services;
@@ -33,16 +42,26 @@ namespace Builder4You.Extensions
         {
             var projectableType = typeof(IProjectable<,>);
 
-            var projectableClasses = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(t => IsProjectableClass(t) && HasPublicParameterlessConstructor(t));
-
-            foreach (var projectableClass in projectableClasses)
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var projectableInterface in projectableClass.GetInterfaces()
-                    .Where(t => t.Name == projectableType.Name))
+                try
                 {
-                    services.AddScoped(projectableInterface, projectableClass);
+                    var projectableClasses = assembly.GetTypes()
+                        .Where(t => IsProjectableClass(t) && HasPublicParameterlessConstructor(t));
+
+                    foreach (Type projectableClass in projectableClasses)
+                    {
+                        foreach (var projectableInterface in projectableClass.GetInterfaces()
+                            .Where(t => t.Name == projectableType.Name))
+                        {
+                            services.AddScoped(projectableInterface, projectableClass);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Not load assembly would be Ignored.
+                    // It's a problem related to race condition applied at testing context.
                 }
             }
 

@@ -28,10 +28,10 @@ namespace Builder4You.Implementations
             var projectable = _provider.GetService<IProjectable<TSource, TResource>>();
             if (projectable is not null)
             {
-                sourceTask.ContinueWith(completed =>
+                Tasks.Add(sourceTask.ContinueWith(completed =>
                 {
                     Resource = projectable.Project(completed.Result);
-                });
+                }));
             }
             else
             {
