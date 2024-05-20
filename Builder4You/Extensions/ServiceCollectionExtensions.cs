@@ -31,7 +31,7 @@ namespace Builder4You.Extensions
                 }
                 catch 
                 { 
-                    // Not load assembly would be Ignored.
+                    // Not loaded assembly is Ignored.
                     // It's a problem related to race condition applied at testing context.
                 }
             }
@@ -60,7 +60,7 @@ namespace Builder4You.Extensions
                 }
                 catch
                 {
-                    // Not load assembly would be Ignored.
+                    // Not loaded assembly is Ignored.
                     // It's a problem related to race condition applied at testing context.
                 }
             }
