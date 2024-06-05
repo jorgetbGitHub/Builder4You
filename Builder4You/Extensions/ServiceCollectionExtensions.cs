@@ -32,7 +32,7 @@ namespace Builder4You.Extensions
                 catch 
                 { 
                     // Not loaded assembly is Ignored.
-                    // It's a problem related to race condition applied at testing context.
+                    // It's a problem related to race condition applied in testing context.
                 }
             }
 
@@ -61,7 +61,7 @@ namespace Builder4You.Extensions
                 catch
                 {
                     // Not loaded assembly is Ignored.
-                    // It's a problem related to race condition applied at testing context.
+                    // It's a problem related to race condition applied in testing context.
                 }
             }
 
