@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p .sonar/scanner 
-          dotnet tool install dotnet-sonarscanner --tool-path /.sonar/scanner
+          dotnet tool install dotnet-sonarscanner --tool-path .sonar/scanner
         # dotnet tool update dotnet-sonnarscanner --tool-path /sonar/scanner
 
       - name: Install Test Coverage tool
