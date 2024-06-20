@@ -55,8 +55,9 @@ jobs:
         
       - name: Publish Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
+        run: ls -a 
         with:
-          filename: ls -a
+          filename: github/workspace/coverage.xml
           badge: true
           fail_below_min: true
           format: markdown
