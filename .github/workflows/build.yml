@@ -51,7 +51,7 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
 
       - name: Test & Generate Code Coverage report
-        run: dotnet-coverage collect "dotnet test" -f xml -o "github/workspace/coverage.xml"
+        run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
         
       - name: Publish Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
@@ -77,6 +77,6 @@ jobs:
             /o:"jorgetbgithub" `
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
             /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.cs.vscoveragexml.reportsPaths=github/workspace/coverage.xml
+            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build --no-incremental
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
