@@ -51,8 +51,9 @@ jobs:
         run: dotnet tool install --global dotnet-coverage
 
       - name: Test & Generate Code Coverage report
-        run: dotnet-coverage collect "dotnet test" -f xml -o "github/workspace/coverage.xml"
-        run: cd github/workspace; ls;
+        run: |
+          dotnet-coverage collect "dotnet test" -f xml -o "github/workspace/coverage.xml"
+          cd github/workspace; ls;
         
       - name: Publish Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
