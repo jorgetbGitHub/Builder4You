@@ -56,7 +56,7 @@ jobs:
       - name: Publish Code Coverage Summary
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: .github/workflows/coverage.xml
+          filename: coverage.xml
           badge: true
           fail_below_min: true
           format: markdown
